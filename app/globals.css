@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 10, 25, 47; /* #0a192f */
+  --background-end-rgb: 16, 28, 44;  /* #101c2c */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 10, 25, 47;
+    --background-end-rgb: 16, 28, 44;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 220 36% 12%; /* #101c2c */
+    --foreground: 210 20% 98%; /* #f8fafc */
+    --card: 220 36% 16%; /* #16213a */
+    --card-foreground: 210 20% 98%;
+    --popover: 220 36% 16%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 200 100% 55%; /* #1e90ff */
+    --primary-foreground: 210 20% 98%;
+    --secondary: 174 62% 45%; /* #00bfae */
+    --secondary-foreground: 210 20% 98%;
+    --muted: 220 36% 20%;
+    --muted-foreground: 210 20% 70%;
+    --accent: 200 100% 55%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 36% 22%;
+    --input: 220 36% 22%;
+    --ring: 200 100% 55%;
+    --chart-1: 200 100% 55%;
+    --chart-2: 174 62% 45%;
+    --chart-3: 220 36% 16%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 220 36% 12%;
+    --foreground: 210 20% 98%;
+    --card: 220 36% 16%;
+    --card-foreground: 210 20% 98%;
+    --popover: 220 36% 16%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 200 100% 55%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 174 62% 45%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 220 36% 20%;
+    --muted-foreground: 210 20% 70%;
+    --accent: 200 100% 55%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 36% 22%;
+    --input: 220 36% 22%;
+    --ring: 200 100% 55%;
+    --chart-1: 200 100% 55%;
+    --chart-2: 174 62% 45%;
+    --chart-3: 220 36% 16%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-bounce-slow {
+  animation: bounce-slow 2.5s infinite;
+}
