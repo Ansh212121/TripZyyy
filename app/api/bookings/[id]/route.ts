@@ -1,16 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Booking from '@/models/Booking';
+import User from '@/models/User';
 
 // GET: Fetch a single booking by ID
 export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
   try {
     await dbConnect();
-    const booking = await Booking.findById(params.id).populate('ride').populate('passenger');
+    const booking = await Booking.findById(params.id)
+      .populate({ path: 'ride', populate: { path: 'driver' } })
+      .populate('passenger');
     if (!booking) {
       return NextResponse.json({ error: 'Booking not found' }, { status: 404 });
     }
-    return NextResponse.json(booking);
+    let riderEmail = null;
+    let passengerEmail = null;
+    if (booking.status === 'accepted') {
+      riderEmail = booking.ride.driver.email;
+      passengerEmail = booking.passenger.email;
+    }
+    return NextResponse.json({
+      ...booking.toObject(),
+      riderEmail,
+      passengerEmail,
+    });
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }

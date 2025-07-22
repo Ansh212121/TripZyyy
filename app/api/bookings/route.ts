@@ -14,7 +14,20 @@ export async function GET() {
       })
       .populate('passenger')
       .sort({ createdAt: -1 });
-    return NextResponse.json(bookings);
+    const bookingsWithEmails = bookings.map((booking: any) => {
+      let riderEmail = null;
+      let passengerEmail = null;
+      if (booking.status === 'accepted') {
+        riderEmail = booking.ride?.driver?.email || null;
+        passengerEmail = booking.passenger?.email || null;
+      }
+      return {
+        ...booking.toObject(),
+        riderEmail,
+        passengerEmail,
+      };
+    });
+    return NextResponse.json(bookingsWithEmails);
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }

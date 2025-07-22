@@ -107,7 +107,7 @@ export default function MyBookingsPage() {
               {acceptedDeclinedBookings.length > 0 ? (
                 acceptedDeclinedBookings.map((booking: any) => (
                   <Card key={booking._id} className="bg-[#1a233a] border-0 shadow-xl hover:shadow-2xl hover:scale-[1.025] transition-transform duration-200 border-gradient-to-r from-[#1e90ff] to-[#00bfae] p-6 rounded-2xl relative flex flex-col gap-2">
-                    <BookingCard booking={booking} />
+                    <BookingCard booking={booking} showRiderEmail={true} />
                     <span className={`px-2 py-1 rounded text-xs font-semibold self-start ${booking.status === 'accepted' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>{booking.status}</span>
                   </Card>
                 ))

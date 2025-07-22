@@ -20,7 +20,10 @@ interface BookingCardProps {
         avatar: string;
       };
     };
+    riderEmail?: string;
+    passengerEmail?: string;
   };
+  showRiderEmail?: boolean; // Added prop for controlling email visibility
 }
 
 const statusColors = {
@@ -35,7 +38,7 @@ const statusText = {
   declined: 'Declined',
 };
 
-export function BookingCard({ booking }: BookingCardProps) {
+export function BookingCard({ booking, showRiderEmail = false }: BookingCardProps) {
   return (
     <Card>
       <CardContent className="p-6">
@@ -77,7 +80,12 @@ export function BookingCard({ booking }: BookingCardProps) {
               <AvatarFallback>{booking.ride?.driver?.name ? booking.ride.driver.name.charAt(0) : "?"}</AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-sm font-medium">Driver: {booking.ride?.driver?.name || "Unknown"}</p>
+              <p className="text-sm font-medium">
+                Driver: {booking.ride?.driver?.name || "Unknown"}
+              </p>
+              {showRiderEmail && booking.riderEmail && (
+                <p className="text-blue-200 text-xs mb-1">Rider Email: {booking.riderEmail}</p>
+              )}
             </div>
           </div>
 
@@ -87,6 +95,9 @@ export function BookingCard({ booking }: BookingCardProps) {
             </p>
           )}
         </div>
+        {!booking.riderEmail && (
+          <p className="text-xs text-blue-300 mt-2">Contact info will be shared after acceptance.</p>
+        )}
       </CardContent>
     </Card>
   );

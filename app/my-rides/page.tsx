@@ -205,7 +205,12 @@ export default function MyRides() {
                         <span>{booking.ride?.time}</span>
                       </div>
                       <div className="text-blue-200 mb-2">Seats Requested: {booking.seatsBooked}</div>
-                      <div className="text-blue-200 mb-2">Passenger: {booking.passenger?.name || 'Unknown'}</div>
+                      <div className="text-blue-200 mb-2">
+                        Passenger: {booking.passenger?.name || 'Unknown'}
+                      </div>
+                      {booking.passengerEmail && (
+                        <div className="text-blue-200 mb-2 text-xs">Passenger Email: {booking.passengerEmail}</div>
+                      )}
                       <span className={`px-2 py-1 rounded text-xs font-semibold ml-2 ${booking.status === 'accepted' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>{booking.status}</span>
                     </CardContent>
                   </Card>
