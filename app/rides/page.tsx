@@ -51,6 +51,7 @@ export default function RidesPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-2 drop-shadow-lg">Find Your Perfect Ride</h1>
+          <p className="text-xl text-blue-200 mb-2 font-semibold">Find your next adventure, save money, and travel together!</p>
           <p className="text-blue-100">Discover rides that match your route and schedule</p>
         </div>
         {/* Search Form */}

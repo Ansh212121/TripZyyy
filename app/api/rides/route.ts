@@ -10,15 +10,24 @@ export async function GET() {
   try {
     await dbConnect();
     const rides = await Ride.find({}).populate('driver').sort({ createdAt: -1 });
-    const now = new Date();
-    // Filter rides where the combined date and time is in the future
-    const filteredRides = rides.filter((ride: any) => {
-      // Combine date and time as 'YYYY-MM-DDTHH:mm:00' in local time
-      if (!ride.date || !ride.time) return false;
-      const rideDateTime = new Date(`${ride.date}T${ride.time}:00`);
-      return rideDateTime > now;
-    });
-    return NextResponse.json(filteredRides);
+    // const now = new Date();
+    // Filter rides where the combined date and time is in the future or today
+    // const filteredRides = rides.filter((ride: any) => {
+    //   if (!ride.date || !ride.time) return false;
+    //   const rideDateTime = new Date(`${ride.date}T${ride.time}:00`);
+    //   // If the ride is today, allow times >= now; if in the future, allow all
+    //   const rideDate = new Date(ride.date);
+    //   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    //   if (rideDate.getTime() === today.getTime()) {
+    //     // Same day: check time
+    //     return rideDateTime >= now;
+    //   } else {
+    //     // Future date
+    //     return rideDate > today;
+    //   }
+    // });
+    // return NextResponse.json(filteredRides);
+    return NextResponse.json(rides);
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }
@@ -32,7 +41,7 @@ export async function POST(req: NextRequest) {
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    const { origin, destination, date, time, availableSeats, price, description } = await req.json();
+    const { origin, destination, date, time, availableSeats, price, description, phone } = await req.json();
     if (!origin || !destination || !date || !time || !availableSeats || !price) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
     }
@@ -69,7 +78,13 @@ export async function POST(req: NextRequest) {
             console.error('❌ About to create user with invalid name:', userPayload);
             userPayload.name = 'Unknown';
           }
-          mongoUser = await User.create(userPayload);
+          mongoUser = await User.create({
+            clerkId: userId,
+            name,
+            email,
+            avatar: clerkUser?.imageUrl || '',
+            phone: phone || '',
+          });
           console.log('Created MongoDB user:', mongoUser);
         } catch (userCreateError) {
           console.error('User.create failed:', JSON.stringify(userCreateError, null, 2));
@@ -79,6 +94,12 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Failed to create or find user for ride posting.', details: userCreateError }, { status: 500 });
           }
         }
+      }
+    } else {
+      // When creating or updating the user, set phone if provided
+      if (phone && mongoUser.phone !== phone) {
+        mongoUser.phone = phone;
+        await mongoUser.save();
       }
     }
     const ride = await Ride.create({

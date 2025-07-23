@@ -10,21 +10,31 @@ export async function GET() {
     const bookings = await Booking.find({})
       .populate({
         path: 'ride',
-        populate: { path: 'driver' }
+        populate: { path: 'driver', select: 'name email avatar phone' }
       })
-      .populate('passenger')
+      .populate({ path: 'passenger', select: 'clerkId name email avatar phone' })
       .sort({ createdAt: -1 });
     const bookingsWithEmails = bookings.map((booking: any) => {
       let riderEmail = null;
       let passengerEmail = null;
+      let riderPhone = null;
       if (booking.status === 'accepted') {
         riderEmail = booking.ride?.driver?.email || null;
         passengerEmail = booking.passenger?.email || null;
+        riderPhone = booking.ride?.driver?.phone || null;
       }
+      // Calculate totalCost
+      const ridePrice = booking.ride?.price || 0;
+      const totalCost = booking.seatsBooked * ridePrice;
+      // Ensure ride.price is included in the response
+      const ride = booking.ride?.toObject ? { ...booking.ride.toObject(), price: ridePrice } : booking.ride;
       return {
         ...booking.toObject(),
+        ride,
+        totalCost,
         riderEmail,
         passengerEmail,
+        riderPhone,
       };
     });
     return NextResponse.json(bookingsWithEmails);

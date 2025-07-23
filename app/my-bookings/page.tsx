@@ -55,6 +55,7 @@ export default function MyBookingsPage() {
       <div className="absolute inset-0 pointer-events-none" style={{background: 'radial-gradient(ellipse at 60% 10%, rgba(30,144,255,0.08) 0%, transparent 70%), radial-gradient(ellipse at 20% 80%, rgba(0,191,174,0.07) 0%, transparent 70%)'}} />
       <div className="max-w-5xl mx-auto px-4 relative z-10">
         <h1 className="mt-12 text-4xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#1e90ff] via-[#00bfae] to-[#1e90ff] text-center drop-shadow-lg">My Bookings</h1>
+        <p className="text-lg text-blue-200 text-center mb-4 font-medium">All your journeys in one place. Track your bookings, check their status, and get ready for your next trip!</p>
         <div className="w-24 h-1 mx-auto mb-8 rounded-full bg-gradient-to-r from-[#1e90ff] via-[#00bfae] to-[#1e90ff]" />
         <Tabs defaultValue="all" className="space-y-6">
           <TabsList className="mb-6">

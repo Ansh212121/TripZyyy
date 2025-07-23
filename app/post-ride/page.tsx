@@ -31,6 +31,7 @@ export default function PostRide() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [phone, setPhone] = useState('');
 
   const {
     register,
@@ -56,7 +57,7 @@ export default function PostRide() {
       const res = await fetch('/api/rides', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, driver: userId }),
+        body: JSON.stringify({ ...data, driver: userId, phone }),
       });
       if (!res.ok) {
         const errData = await res.json();
@@ -73,8 +74,23 @@ export default function PostRide() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a192f] via-[#003366] to-[#101c2c] text-white py-10">
       <div className="max-w-2xl mx-auto px-4">
-        <div className="bg-[#16213a] rounded-2xl shadow-xl p-8 border border-[#1e293b]/20">
-          <h1 className="text-3xl font-bold mb-6 text-[#1e90ff] text-center">Post a New Ride</h1>
+        {/* Illustration and catchline */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#1e90ff]/30 to-[#00bfae]/30 flex items-center justify-center mb-4 shadow-lg">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="80" height="80" rx="40" fill="#1e90ff" fillOpacity="0.15"/>
+              <path d="M20 60c0-8 8-12 20-12s20 4 20 12" stroke="#00bfae" strokeWidth="3" strokeLinecap="round"/>
+              <circle cx="32" cy="36" r="6" fill="#1e90ff"/>
+              <circle cx="48" cy="36" r="6" fill="#00bfae"/>
+              <ellipse cx="40" cy="50" rx="8" ry="4" fill="#1e90ff" fillOpacity="0.3"/>
+            </svg>
+          </div>
+          <h2 className="text-2xl font-extrabold text-[#1e90ff] mb-2 text-center drop-shadow">Ready to Share Your Journey?</h2>
+          <p className="text-lg text-blue-200 text-center font-medium max-w-md">Fill your empty seats, meet awesome people, and make every trip memorable. Posting a ride is quick, easy, and helps the planet too!</p>
+        </div>
+        <div className="bg-[#16213a] rounded-2xl shadow-2xl p-8 border border-[#1e293b]/20">
+          <h1 className="text-3xl font-bold mb-2 text-[#1e90ff] text-center">Post a New Ride</h1>
+          <p className="text-lg text-blue-200 text-center mb-6 font-medium">Share your journey, fill your empty seats, and make new friends. Help others reach their destination while saving on travel costs!</p>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
               {/* Origin */}
@@ -104,6 +120,18 @@ export default function PostRide() {
                 {errors.destination && (
                   <p className="text-sm text-red-600">{errors.destination.message}</p>
                 )}
+              </div>
+              {/* Contact Number */}
+              <div>
+                <label className="block text-blue-100 mb-1">Contact Number</label>
+                <Input
+                  type="tel"
+                  placeholder="Enter your phone number"
+                  value={phone}
+                  onChange={e => setPhone(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg bg-[#101c2c] text-white border border-[#1e90ff]/30 focus:border-[#1e90ff] focus:ring-2 focus:ring-[#1e90ff]/40 outline-none transition"
+                  required
+                />
               </div>
               {/* Date */}
               <div>

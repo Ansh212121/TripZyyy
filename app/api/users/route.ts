@@ -17,11 +17,11 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
-    const { name, email, avatar } = await req.json();
+    const { name, email, avatar, phone } = await req.json();
     if (!name || !email) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
     }
-    const user = await User.create({ name, email, avatar });
+    const user = await User.create({ name, email, avatar, phone });
     return NextResponse.json(user, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });

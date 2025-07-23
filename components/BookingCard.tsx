@@ -19,9 +19,11 @@ interface BookingCardProps {
         name: string;
         avatar: string;
       };
+      price: number; // Added price to ride interface
     };
     riderEmail?: string;
     passengerEmail?: string;
+    riderPhone?: string; // Added riderPhone to the interface
   };
   showRiderEmail?: boolean; // Added prop for controlling email visibility
 }
@@ -69,7 +71,12 @@ export function BookingCard({ booking, showRiderEmail = false }: BookingCardProp
             <span className="text-sm">{booking.seatsBooked} seat{booking.seatsBooked > 1 ? 's' : ''}</span>
           </div>
           <div className="text-sm font-medium">
-            ${booking.totalCost} total
+            ${typeof booking.totalCost === 'number' && !isNaN(booking.totalCost)
+              ? booking.totalCost
+              : (booking.seatsBooked && booking.ride?.price
+                ? booking.seatsBooked * booking.ride.price
+                : 0)
+            } total
           </div>
         </div>
 
@@ -85,6 +92,9 @@ export function BookingCard({ booking, showRiderEmail = false }: BookingCardProp
               </p>
               {showRiderEmail && booking.riderEmail && (
                 <p className="text-blue-200 text-xs mb-1">Rider Email: {booking.riderEmail}</p>
+              )}
+              {showRiderEmail && booking.riderPhone && (
+                <p className="text-blue-200 text-xs mb-1">Rider Phone: {booking.riderPhone}</p>
               )}
             </div>
           </div>
