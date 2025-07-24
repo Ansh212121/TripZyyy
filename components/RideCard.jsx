@@ -3,8 +3,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { MapPin, Calendar, Clock, Users, Star } from 'lucide-react';
+import RouteMap from './RouteMap';
+import { useState } from 'react';
 
 export function RideCard({ ride }) {
+  const [showRoute, setShowRoute] = useState(false);
   return (
     <Card className="hover:shadow-lg transition-shadow">
       <CardContent className="p-6">
@@ -22,6 +25,17 @@ export function RideCard({ ride }) {
                 <span className="font-medium">{ride.destination}</span>
               </div>
             </div>
+            <button
+              className="text-xs text-blue-500 underline mb-2"
+              onClick={() => setShowRoute((v) => !v)}
+            >
+              {showRoute ? 'Hide Route' : 'Show Route'}
+            </button>
+            {showRoute && (
+              <div className="my-2">
+                <RouteMap origin={ride.origin} destination={ride.destination} />
+              </div>
+            )}
 
             <div className="flex items-center space-x-6 text-sm text-gray-600 mb-4">
               <div className="flex items-center space-x-1">

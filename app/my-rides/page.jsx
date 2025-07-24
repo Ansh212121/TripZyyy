@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Loader } from '@/components/Loader';
 import { MapPin, Calendar, Clock, Users, Plus } from 'lucide-react';
+import { RideCard as SharedRideCard } from '@/components/RideCard';
 
 const FILTERS = [
   { label: 'All Rides', value: 'all' },
@@ -191,34 +192,13 @@ export default function MyRides() {
           ))}
         </div>
         {filteredRides.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <h2 className="text-2xl font-bold text-white mb-2">No rides found</h2>
-            <p className="text-blue-200 mb-6 text-center max-w-md">
-              {filter === 'all'
-                ? "You haven't posted any rides yet. Share your journey and help others reach their destination!"
-                : filter === 'pending'
-                ? "No rides with pending requests at the moment."
-                : "No rides with accepted or declined requests at the moment."}
-            </p>
-            <a
-              href="/post-ride"
-              className="inline-block bg-gradient-to-r from-[#1e90ff] to-[#00bfae] text-white font-semibold py-2 px-6 rounded-lg shadow hover:from-[#00bfae] hover:to-[#1e90ff] transition-colors text-center"
-            >
-              Post a Ride
-            </a>
-          </div>
+          <div className="text-blue-300 text-center mt-8">No rides found for this filter.</div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {filteredRides.map((ride) => {
-              // Filter booking requests for this ride based on the selected filter
-              let rideBookings = bookings.filter((b) => b.ride?._id === ride._id);
-              if (filter === 'pending') {
-                rideBookings = rideBookings.filter((b) => b.status === 'pending');
-              } else if (filter === 'other') {
-                rideBookings = rideBookings.filter((b) => b.status === 'accepted' || b.status === 'declined');
-              }
+              const rideBookings = bookings.filter((b) => b.ride?._id === ride._id);
               return (
-                <RideCard key={ride._id} ride={ride} rideBookings={rideBookings} filter={filter} />
+                <SharedRideCard key={ride._id} ride={ride} rideBookings={rideBookings} />
               );
             })}
           </div>

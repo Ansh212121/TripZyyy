@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Calendar, Users, DollarSign } from 'lucide-react';
 import { Loader } from '@/components/Loader';
+import MapPicker from '@/components/MapPicker';
 
 const rideSchema = z.object({
   origin: z.string().min(1, 'Origin is required'),
@@ -30,6 +31,8 @@ export default function PostRide() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [phone, setPhone] = useState('');
+  const [showOriginPicker, setShowOriginPicker] = useState(false);
+  const [showDestinationPicker, setShowDestinationPicker] = useState(false);
 
   const {
     register,
@@ -98,26 +101,36 @@ export default function PostRide() {
               {/* Origin */}
               <div>
                 <label className="block text-blue-100 mb-1">Origin</label>
-                <Input
-                  type="text"
-                  placeholder="Starting location"
-                  {...register('origin')}
-                  className="w-full px-4 py-2 rounded-lg bg-[#101c2c] text-white border border-[#1e90ff]/30 focus:border-[#1e90ff] focus:ring-2 focus:ring-[#1e90ff]/40 outline-none transition"
-                  required
-                />
+                <div className="flex gap-2">
+                  <Input
+                    type="text"
+                    placeholder="Starting location"
+                    {...register('origin')}
+                    className="w-full px-4 py-2 rounded-lg bg-[#101c2c] text-white border border-[#1e90ff]/30 focus:border-[#1e90ff] focus:ring-2 focus:ring-[#1e90ff]/40 outline-none transition"
+                    required
+                  />
+                  <Button type="button" variant="outline" className="border-[#1e90ff] text-xs px-2 py-1" onClick={() => setShowOriginPicker(true)}>
+                    Pick on Map
+                  </Button>
+                </div>
                 {errors.origin && <p className="text-sm text-red-600">{errors.origin.message}</p>}
               </div>
 
               {/* Destination */}
               <div>
                 <label className="block text-blue-100 mb-1">Destination</label>
-                <Input
-                  type="text"
-                  placeholder="Destination"
-                  {...register('destination')}
-                  className="w-full px-4 py-2 rounded-lg bg-[#101c2c] text-white border border-[#00bfae]/30 focus:border-[#00bfae] focus:ring-2 focus:ring-[#00bfae]/40 outline-none transition"
-                  required
-                />
+                <div className="flex gap-2">
+                  <Input
+                    type="text"
+                    placeholder="Destination"
+                    {...register('destination')}
+                    className="w-full px-4 py-2 rounded-lg bg-[#101c2c] text-white border border-[#00bfae]/30 focus:border-[#00bfae] focus:ring-2 focus:ring-[#00bfae]/40 outline-none transition"
+                    required
+                  />
+                  <Button type="button" variant="outline" className="border-[#00bfae] text-xs px-2 py-1" onClick={() => setShowDestinationPicker(true)}>
+                    Pick on Map
+                  </Button>
+                </div>
                 {errors.destination && <p className="text-sm text-red-600">{errors.destination.message}</p>}
               </div>
 
@@ -232,6 +245,26 @@ export default function PostRide() {
           </form>
         </div>
       </div>
+      <MapPicker
+        open={showOriginPicker}
+        onClose={() => setShowOriginPicker(false)}
+        onSelect={({ address }) => {
+          // Set the value of the origin field
+          const input = document.querySelector('input[name="origin"]');
+          if (input) input.value = address;
+          // For react-hook-form, trigger change event
+          input?.dispatchEvent(new Event('input', { bubbles: true }));
+        }}
+      />
+      <MapPicker
+        open={showDestinationPicker}
+        onClose={() => setShowDestinationPicker(false)}
+        onSelect={({ address }) => {
+          const input = document.querySelector('input[name="destination"]');
+          if (input) input.value = address;
+          input?.dispatchEvent(new Event('input', { bubbles: true }));
+        }}
+      />
     </div>
   );
 }

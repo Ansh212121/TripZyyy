@@ -7,6 +7,8 @@ import { Card } from '@/components/ui/card';
 import { RideCard } from '@/components/RideCard';
 import { Search, MapPin, Calendar, Clock, Users } from 'lucide-react';
 import Link from 'next/link';
+import MapPicker from '@/components/MapPicker';
+import RouteMap from '@/components/RouteMap';
 
 export default function RidesPage() {
   const [searchOrigin, setSearchOrigin] = useState('');
@@ -16,6 +18,8 @@ export default function RidesPage() {
   const [allRides, setAllRides] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showOriginPicker, setShowOriginPicker] = useState(false);
+  const [showDestinationPicker, setShowDestinationPicker] = useState(false);
 
   useEffect(() => {
     fetchRides();
@@ -62,24 +66,34 @@ export default function RidesPage() {
                 <MapPin className="mr-1 h-4 w-4" />
                 From
               </label>
-              <Input
-                placeholder="Starting location"
-                value={searchOrigin}
-                onChange={(e) => setSearchOrigin(e.target.value)}
-                className="bg-[#101c2c] text-white border border-[#1e90ff]/30 focus:border-[#1e90ff] focus:ring-2 focus:ring-[#1e90ff]/40"
-              />
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Starting location"
+                  value={searchOrigin}
+                  onChange={(e) => setSearchOrigin(e.target.value)}
+                  className="bg-[#101c2c] text-white border border-[#1e90ff]/30 focus:border-[#1e90ff] focus:ring-2 focus:ring-[#1e90ff]/40"
+                />
+                <Button type="button" variant="outline" className="border-[#1e90ff] text-xs px-2 py-1" onClick={() => setShowOriginPicker(true)}>
+                  Pick on Map
+                </Button>
+              </div>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-blue-100 flex items-center">
                 <MapPin className="mr-1 h-4 w-4" />
                 To
               </label>
-              <Input
-                placeholder="Destination"
-                value={searchDestination}
-                onChange={(e) => setSearchDestination(e.target.value)}
-                className="bg-[#101c2c] text-white border border-[#00bfae]/30 focus:border-[#00bfae] focus:ring-2 focus:ring-[#00bfae]/40"
-              />
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Destination"
+                  value={searchDestination}
+                  onChange={(e) => setSearchDestination(e.target.value)}
+                  className="bg-[#101c2c] text-white border border-[#00bfae]/30 focus:border-[#00bfae] focus:ring-2 focus:ring-[#00bfae]/40"
+                />
+                <Button type="button" variant="outline" className="border-[#00bfae] text-xs px-2 py-1" onClick={() => setShowDestinationPicker(true)}>
+                  Pick on Map
+                </Button>
+              </div>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-blue-100 flex items-center">
@@ -117,67 +131,7 @@ export default function RidesPage() {
           ) : rides.length > 0 ? (
             <div className="grid md:grid-cols-2 gap-8">
               {rides.map((ride) => (
-                <div
-                  key={ride._id}
-                  className={`relative flex flex-col border-l-8 ${ride.availableSeats <= 2 ? 'border-red-500' : 'border-blue-500'} bg-gradient-to-br from-[#16213a] via-[#1a233a] to-[#101c2c] rounded-2xl shadow-xl hover:shadow-2xl transition-shadow p-0 border border-[#1e293b]/20 overflow-hidden group`}
-                >
-                  {/* Header: Route and Date */}
-                  <div className="flex items-center justify-between px-6 pt-6 pb-2">
-                    <div className="flex items-center gap-2 font-bold text-lg text-white">
-                      <MapPin className="h-5 w-5 text-blue-400" />
-                      <span>{ride.origin}</span>
-                      <span className="mx-1 text-blue-200">➜</span>
-                      <span>{ride.destination}</span>
-                    </div>
-                    <span className="text-xs text-blue-200 font-semibold bg-blue-900/40 px-3 py-1 rounded-full">{ride.date}</span>
-                  </div>
-                  {/* Driver Avatar and Price */}
-                  <div className="flex items-center justify-between px-6 pb-2">
-                    <div className="flex items-center gap-2">
-                      {ride.driver?.avatar ? (
-                        <img src={ride.driver.avatar} alt={ride.driver.name} className="h-10 w-10 rounded-full border-2 border-blue-500 shadow" />
-                      ) : (
-                        <div className="h-10 w-10 rounded-full bg-blue-800 flex items-center justify-center text-white font-bold text-lg border-2 border-blue-500 shadow">
-                          {ride.driver?.name ? ride.driver.name[0] : 'D'}
-                        </div>
-                      )}
-                      <span className="text-blue-100 font-medium">{ride.driver?.name || 'Driver'}</span>
-                    </div>
-                    <div className="flex flex-col items-end">
-                      <span className="text-2xl font-extrabold text-green-300 drop-shadow">₹{ride.price}</span>
-                      <span className="text-xs text-blue-200">per seat</span>
-                    </div>
-                  </div>
-                  {/* Details Row */}
-                  <div className="flex flex-wrap gap-x-6 gap-y-2 text-blue-100 text-base px-6 pb-2">
-                    <span className="flex items-center gap-1"><Clock className="h-4 w-4 text-blue-300" />{ride.time}</span>
-                    <span className="flex items-center gap-1"><Users className="h-4 w-4 text-blue-300" />{ride.availableSeats} seats</span>
-                    {/* Info icon for extra details */}
-                    {ride.description && (
-                      <span className="flex items-center gap-1 group-hover:underline cursor-pointer" title={ride.description}>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z" /></svg>
-                        <span className="text-xs text-blue-300">Details</span>
-                      </span>
-                    )}
-                  </div>
-                  {/* Divider */}
-                  <div className="border-t border-blue-900 mx-6 my-2" />
-                  {/* Few seats left badge at bottom left */}
-                  {ride.availableSeats <= 2 && (
-                    <div className="px-6 pb-1 flex">
-                      <span className="inline-block bg-red-500/90 text-white text-xs font-bold px-3 py-1 rounded-full shadow animate-pulse">Few seats left!</span>
-                    </div>
-                  )}
-                  {/* CTA Button */}
-                  <div className="px-6 pb-6 pt-2 flex justify-end">
-                    <Link
-                      href={`/ride/${ride._id}`}
-                      className="inline-block bg-gradient-to-r from-[#1e90ff] to-[#00bfae] text-white font-semibold py-2 px-6 rounded-lg shadow hover:from-[#00bfae] hover:to-[#1e90ff] transition-colors text-center"
-                    >
-                      View Details
-                    </Link>
-                  </div>
-                </div>
+                <RideCard key={ride._id} ride={ride} />
               ))}
             </div>
           ) : (
@@ -187,6 +141,22 @@ export default function RidesPage() {
           )}
         </div>
       </div>
+      <MapPicker
+        open={showOriginPicker}
+        onClose={() => setShowOriginPicker(false)}
+        onSelect={({ address }) => setSearchOrigin(address)}
+      />
+      <MapPicker
+        open={showDestinationPicker}
+        onClose={() => setShowDestinationPicker(false)}
+        onSelect={({ address }) => setSearchDestination(address)}
+      />
+      {/* Show route if both locations are set */}
+      {searchOrigin && searchDestination && (
+        <div className="my-8">
+          <RouteMap origin={searchOrigin} destination={searchDestination} />
+        </div>
+      )}
     </div>
   );
 }

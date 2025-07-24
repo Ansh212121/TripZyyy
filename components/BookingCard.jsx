@@ -2,6 +2,8 @@ import { CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { MapPin, Calendar, Clock, Users } from 'lucide-react';
+import RouteMap from './RouteMap';
+import { useState } from 'react';
 
 const statusColors = {
   pending: 'bg-yellow-100 text-yellow-800',
@@ -16,6 +18,7 @@ const statusText = {
 };
 
 export function BookingCard({ booking, showRiderEmail }) {
+  const [showRoute, setShowRoute] = useState(false);
   // Status color and label
   const statusLabel = statusText[booking.status];
   const statusColor =
@@ -43,6 +46,17 @@ export function BookingCard({ booking, showRiderEmail }) {
             <span>{booking.ride.destination}</span>
           </div>
         </div>
+        <button
+          className="text-xs text-blue-500 underline mb-2 self-start"
+          onClick={() => setShowRoute((v) => !v)}
+        >
+          {showRoute ? 'Hide Route' : 'Show Route'}
+        </button>
+        {showRoute && (
+          <div className="my-2">
+            <RouteMap origin={booking.ride.origin} destination={booking.ride.destination} />
+          </div>
+        )}
 
         {/* Status Row */}
         <div className="mt-1 mb-1">
