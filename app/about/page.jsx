@@ -9,7 +9,7 @@ export default function About() {
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 mt-8">
-            About CarpoolConnect
+            About TripZyyy
           </h1>
           <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
             We're on a mission to make travel more affordable, sustainable, and social by connecting drivers with empty seats to passengers looking for a ride.
@@ -25,7 +25,7 @@ export default function About() {
             <p className="text-lg text-blue-100 text-center max-w-4xl mx-auto leading-relaxed">
               Every day, millions of cars travel with empty seats while others struggle with expensive transport options. 
               We believe in the power of sharing - not just resources, but experiences, stories, and connections. 
-              CarpoolConnect transforms every journey into an opportunity to save money, protect the environment, and build community.
+              TripZyyy transforms every journey into an opportunity to save money, protect the environment, and build community.
             </p>
           </div>
         </section>

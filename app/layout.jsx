@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
               {/* Logo and About */}
               <div>
-                <h2 className="text-xl font-bold text-white">CarpoolConnect</h2>
+                <h2 className="text-xl font-bold text-white">TripZyyy</h2>
                 <p className="mt-4 text-sm">
                   Smart, secure, and sustainable carpooling. Save money, meet people, and reduce your carbon footprint — all in one ride.
                 </p>
@@ -72,7 +72,7 @@ export default function RootLayout({ children }) {
             </div>
 
             <div className="border-t border-gray-700 mt-10 pt-4 text-sm text-center text-gray-500">
-              &copy; {new Date().getFullYear()} CarpoolConnect. All rights reserved. Made by Ansh Agarwal. Contact: <a href="mailto:ansh212109@gmail.com" className="underline hover:text-blue-400">ansh212109@gmail.com</a>
+              &copy; {new Date().getFullYear()} TripZyyy. All rights reserved. Made by Ansh Agarwal. Contact: <a href="mailto:ansh212109@gmail.com" className="underline hover:text-blue-400">ansh212109@gmail.com</a>
             </div>
           </footer>
 

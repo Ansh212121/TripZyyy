@@ -18,7 +18,7 @@ export function Navbar() {
           <Link href="/" className="flex items-center space-x-2 group">
             <Car className="h-9 w-9 text-[#00bfae] drop-shadow-lg group-hover:scale-110 transition-transform" />
             <span className="text-2xl font-extrabold text-white tracking-tight drop-shadow-lg group-hover:text-[#1e90ff] transition-colors">
-              CarpoolConnect
+              TripZyyy
             </span>
           </Link>
 
