@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
@@ -118,13 +118,7 @@ export default function MyRides() {
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all');
 
-  useEffect(() => {
-    if (isLoaded && isSignedIn) {
-      fetchData();
-    }
-  }, [isLoaded, isSignedIn, userId]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -143,7 +137,13 @@ export default function MyRides() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      fetchData();
+    }
+  }, [isLoaded, isSignedIn, fetchData]);
 
   if (!isLoaded || loading) return <Loader />;
   if (!isSignedIn) {

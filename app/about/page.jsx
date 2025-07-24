@@ -12,7 +12,7 @@ export default function About() {
             About TripZyyy
           </h1>
           <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            We're on a mission to make travel more affordable, sustainable, and social by connecting drivers with empty seats to passengers looking for a ride.
+            We&apos;re on a mission to make travel more affordable, sustainable, and social by connecting drivers with empty seats to passengers looking for a ride.
           </p>
         </div>
 

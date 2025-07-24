@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { BookingCard } from '@/components/BookingCard';
@@ -21,13 +21,7 @@ export default function MyBookingsPage() {
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all');
 
-  useEffect(() => {
-    if (isLoaded && isSignedIn) {
-      fetchBookings();
-    }
-  }, [isLoaded, isSignedIn, userId]);
-
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -40,7 +34,13 @@ export default function MyBookingsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      fetchBookings();
+    }
+  }, [isLoaded, isSignedIn, fetchBookings]);
 
   if (!isLoaded || loading) return <Loader />;
   if (!isSignedIn) {

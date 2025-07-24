@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -17,11 +17,7 @@ export default function RideDetails({ params }) {
   const [seatsToBook, setSeatsToBook] = useState(1);
   const [bookingError, setBookingError] = useState(null);
 
-  useEffect(() => {
-    fetchRide();
-  }, [params.id]);
-
-  const fetchRide = async () => {
+  const fetchRide = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -34,7 +30,11 @@ export default function RideDetails({ params }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id]);
+
+  useEffect(() => {
+    fetchRide();
+  }, [fetchRide]);
 
   const handleBooking = async (e) => {
     e.preventDefault();

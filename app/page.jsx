@@ -121,7 +121,7 @@ export default function Home() {
               Get Started Today
             </h2>
             <p className="text-lg text-blue-100">
-              Whether you're driving or looking for a ride, we've got you covered.
+              Whether you&apos;re driving or looking for a ride, we&apos;ve got you covered.
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
