@@ -5,8 +5,13 @@ import { useAuth } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { BookingCard } from '@/components/BookingCard';
 import { Card } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Loader } from '@/components/Loader';
+
+const FILTERS = [
+  { label: 'All Bookings', value: 'all' },
+  { label: 'Pending', value: 'pending' },
+  { label: 'Accepted/Declined', value: 'other' },
+];
 
 export default function MyBookingsPage() {
   const { isSignedIn, isLoaded, userId } = useAuth();
@@ -14,6 +19,7 @@ export default function MyBookingsPage() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [filter, setFilter] = useState('all');
 
   useEffect(() => {
     if (isLoaded && isSignedIn) {
@@ -36,139 +42,85 @@ export default function MyBookingsPage() {
     }
   };
 
-  if (!isLoaded) {
-    return <Loader />;
-  }
-
+  if (!isLoaded || loading) return <Loader />;
   if (!isSignedIn) {
     router.push('/sign-in');
     return <Loader />;
   }
 
-  const pendingBookings = bookings.filter((b) => b.status === 'pending');
-  const acceptedDeclinedBookings = bookings.filter(
-    (b) => b.status === 'accepted' || b.status === 'declined'
-  );
+  let filteredBookings = bookings;
+  if (filter === 'pending') {
+    filteredBookings = bookings.filter((b) => b.status === 'pending');
+  } else if (filter === 'other') {
+    filteredBookings = bookings.filter((b) => b.status === 'accepted' || b.status === 'declined');
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a192f] via-[#1a233a] to-[#003366] relative overflow-x-hidden">
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse at 60% 10%, rgba(30,144,255,0.08) 0%, transparent 70%), radial-gradient(ellipse at 20% 80%, rgba(0,191,174,0.07) 0%, transparent 70%)',
-        }}
-      />
-      <section className="w-full block px-4 mb-8">
-        <h1 className="mt-12 text-4xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#1e90ff] via-[#00bfae] to-[#1e90ff] text-center drop-shadow-lg">
-          My Bookings
+    <div className="min-h-screen py-12">
+      <div className="max-w-6xl mx-auto px-4">
+        <h1 className="text-4xl font-extrabold mt-8 mb-3 text-transparent bg-clip-text bg-gradient-to-r from-[#1e90ff] via-[#00bfae] to-[#1e90ff] text-center drop-shadow-lg">
+          Your Booked Journeys
         </h1>
-        <p className="text-lg text-blue-200 text-center mb-4 font-medium">
-          All your journeys in one place. Track your bookings, check their status, and get ready for your next trip!
+        <p className="text-lg text-blue-200 text-center mb-10 font-medium">
+          Every adventure starts with a booking! Track your rides, check their status, and get ready to hit the road. 🚗✨
         </p>
-        <div className="w-24 h-1 mx-auto mb-8 rounded-full bg-gradient-to-r from-[#1e90ff] via-[#00bfae] to-[#1e90ff]" />
-        <Tabs defaultValue="all" className="space-y-6 w-full max-w-3xl mx-auto">
-          <TabsList className="mb-6">
-            <TabsTrigger value="all">All Bookings ({bookings.length})</TabsTrigger>
-            <TabsTrigger value="pending">Pending ({pendingBookings.length})</TabsTrigger>
-            <TabsTrigger value="other">Accepted/Declined ({acceptedDeclinedBookings.length})</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="all">
-            {bookings.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-20">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-blue-400 mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 17v-2a4 4 0 018 0v2m-4-4v4m-4 4h8a2 2 0 002-2v-5a2 2 0 00-2-2h-1.5a2 2 0 01-2-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v5a2 2 0 002 2H8a2 2 0 012 2v5a2 2 0 01-2 2z" />
-                </svg>
-                <h2 className="text-2xl font-bold text-white mb-2">No bookings yet</h2>
-                <p className="text-blue-200 mb-6 text-center max-w-md">
-                  You haven't booked any rides yet. Start exploring available rides and book your next journey!
-                </p>
-                <a
-                  href="/rides"
-                  className="inline-block bg-gradient-to-r from-[#1e90ff] to-[#00bfae] text-white font-semibold py-2 px-6 rounded-lg shadow hover:from-[#00bfae] hover:to-[#1e90ff] transition-colors text-center"
+        {/* Filter Buttons */}
+        <div className="flex justify-center gap-4 mb-8">
+          {FILTERS.map((f) => (
+            <button
+              key={f.value}
+              onClick={() => setFilter(f.value)}
+              className={`px-5 py-2 rounded-lg font-semibold transition-colors focus:outline-none border-2 border-transparent
+                ${filter === f.value
+                  ? 'bg-gradient-to-r from-[#1e90ff] to-[#00bfae] text-white border-[#00bfae] shadow-lg'
+                  : 'bg-[#16213a] text-blue-200 hover:bg-[#1e90ff]/10 border-[#1e90ff]'}
+              `}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+        {filteredBookings.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <h2 className="text-2xl font-bold text-white mb-2">No bookings yet</h2>
+            <p className="text-blue-200 mb-6 text-center max-w-md">
+              {filter === 'all'
+                ? "You haven't booked any rides yet. Start exploring available rides and book your next journey!"
+                : filter === 'pending'
+                ? "No pending bookings at the moment."
+                : "No accepted or declined bookings at the moment."}
+            </p>
+            <a
+              href="/rides"
+              className="inline-block bg-gradient-to-r from-[#1e90ff] to-[#00bfae] text-white font-semibold py-2 px-6 rounded-lg shadow hover:from-[#00bfae] hover:to-[#1e90ff] transition-colors text-center"
+            >
+              Find a Ride
+            </a>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+            {filteredBookings.map((booking) => (
+              <Card
+                key={booking._id}
+                className="w-full bg-[#1a233a] border-0 shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-200 p-6 rounded-2xl flex flex-col gap-3 h-fit"
+              >
+                <BookingCard booking={booking} showRiderEmail={filter === 'other'} />
+                <span
+                  className={`px-2 py-1 rounded text-xs font-semibold self-start ${
+                    booking.status === 'pending'
+                      ? 'bg-yellow-500/20 text-yellow-400'
+                      : booking.status === 'accepted'
+                      ? 'bg-green-500/20 text-green-400'
+                      : 'bg-red-500/20 text-red-400'
+                  }`}
                 >
-                  Find a Ride
-                </a>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full mt-8">
-                {bookings.map((booking) => (
-                  <Card
-                    key={booking._id}
-                    className="w-full bg-[#1a233a] border-0 shadow-xl hover:shadow-2xl hover:scale-[1.025] transition-transform duration-200 border-gradient-to-r from-[#1e90ff] to-[#00bfae] p-6 rounded-2xl flex flex-col gap-2"
-                  >
-                    <BookingCard booking={booking} />
-                    <span
-                      className={`px-2 py-1 rounded text-xs font-semibold self-start ${
-                        booking.status === 'pending'
-                          ? 'bg-yellow-500/20 text-yellow-400'
-                          : booking.status === 'accepted'
-                          ? 'bg-green-500/20 text-green-400'
-                          : 'bg-red-500/20 text-red-400'
-                      }`}
-                    >
-                      {booking.status}
-                    </span>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </TabsContent>
-
-          <TabsContent value="pending">
-            <div className="grid md:grid-cols-2 gap-8">
-              {pendingBookings.length > 0 ? (
-                pendingBookings.map((booking) => (
-                  <Card
-                    key={booking._id}
-                    className="bg-[#1a233a] border-0 shadow-xl hover:shadow-2xl hover:scale-[1.025] transition-transform duration-200 border-gradient-to-r from-[#1e90ff] to-[#00bfae] p-6 rounded-2xl relative flex flex-col gap-2"
-                  >
-                    <BookingCard booking={booking} />
-                    <span className="px-2 py-1 rounded text-xs font-semibold self-start bg-yellow-500/20 text-yellow-400">
-                      pending
-                    </span>
-                  </Card>
-                ))
-              ) : (
-                <div className="flex flex-col items-center justify-center py-16">
-                  <svg className="h-16 w-16 text-blue-400 mb-4" />
-                  <p className="text-blue-200 text-lg">No pending bookings at the moment.</p>
-                </div>
-              )}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="other">
-            <div className="grid md:grid-cols-2 gap-8">
-              {acceptedDeclinedBookings.length > 0 ? (
-                acceptedDeclinedBookings.map((booking) => (
-                  <Card
-                    key={booking._id}
-                    className="bg-[#1a233a] border-0 shadow-xl hover:shadow-2xl hover:scale-[1.025] transition-transform duration-200 border-gradient-to-r from-[#1e90ff] to-[#00bfae] p-6 rounded-2xl relative flex flex-col gap-2"
-                  >
-                    <BookingCard booking={booking} showRiderEmail={true} />
-                    <span
-                      className={`px-2 py-1 rounded text-xs font-semibold self-start ${
-                        booking.status === 'accepted'
-                          ? 'bg-green-500/20 text-green-400'
-                          : 'bg-red-500/20 text-red-400'
-                      }`}
-                    >
-                      {booking.status}
-                    </span>
-                  </Card>
-                ))
-              ) : (
-                <div className="flex flex-col items-center justify-center py-16">
-                  <svg className="h-16 w-16 text-blue-400 mb-4" />
-                  <p className="text-blue-200 text-lg">No accepted or declined bookings at the moment.</p>
-                </div>
-              )}
-            </div>
-          </TabsContent>
-        </Tabs>
-      </section>
+                  {booking.status}
+                </span>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

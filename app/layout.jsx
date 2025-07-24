@@ -6,24 +6,29 @@ import { ToastProvider } from '@/components/ToastProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
-// Removed metadata export since it's not used in JS layout files
-
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={inter.className}>
+        <body className={`${inter.className} bg-gray-900 overflow-x-hidden`}>
           <Navbar />
-          <main className="min-h-screen bg-gray-50">
+
+          {/* Main content with padding to avoid overlap with sticky Navbar */}
+          <main className="pt-0 min-h-[calc(100vh-64px)] text-white">
             {children}
           </main>
-          <footer className="bg-gray-900 text-gray-300 pt-10 pb-6 px-6 mt-12">
+
+          {/* Footer */}
+          <footer className="bg-gray-900 text-gray-300 pt-10 pb-6 px-6">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
               {/* Logo and About */}
               <div>
                 <h2 className="text-xl font-bold text-white">CarpoolConnect</h2>
-                <p className="mt-4 text-sm">Smart, secure, and sustainable carpooling. Save money, meet people, and reduce your carbon footprint — all in one ride.</p>
+                <p className="mt-4 text-sm">
+                  Smart, secure, and sustainable carpooling. Save money, meet people, and reduce your carbon footprint — all in one ride.
+                </p>
               </div>
+
               {/* Quick Links */}
               <div>
                 <h3 className="text-lg font-semibold text-white mb-4">Quick Links</h3>
@@ -34,6 +39,7 @@ export default function RootLayout({ children }) {
                   <li><a href="/about" className="hover:underline">About</a></li>
                 </ul>
               </div>
+
               {/* Support */}
               <div>
                 <h3 className="text-lg font-semibold text-white mb-4">Support</h3>
@@ -44,20 +50,32 @@ export default function RootLayout({ children }) {
                   <li><a href="/help" className="hover:underline">Help Center</a></li>
                 </ul>
               </div>
+
               {/* Newsletter */}
               <div>
                 <h3 className="text-lg font-semibold text-white mb-4">Stay Connected</h3>
                 <p className="text-sm mb-3">Join our mailing list for updates and promotions.</p>
                 <form className="flex items-center">
-                  <input type="email" placeholder="Your email" className="w-full p-2 rounded-l bg-gray-800 text-sm text-white focus:outline-none" />
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r text-sm" type="button">Subscribe</button>
+                  <input
+                    type="email"
+                    placeholder="Your email"
+                    className="w-full p-2 rounded-l bg-gray-800 text-sm text-white focus:outline-none"
+                  />
+                  <button
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r text-sm"
+                    type="button"
+                  >
+                    Subscribe
+                  </button>
                 </form>
               </div>
             </div>
+
             <div className="border-t border-gray-700 mt-10 pt-4 text-sm text-center text-gray-500">
               &copy; {new Date().getFullYear()} CarpoolConnect. All rights reserved. Made by Ansh Agarwal. Contact: <a href="mailto:ansh212109@gmail.com" className="underline hover:text-blue-400">ansh212109@gmail.com</a>
             </div>
           </footer>
+
           <ToastProvider />
         </body>
       </html>
