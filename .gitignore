@@ -38,3 +38,7 @@ next-env.d.ts
 .bolt/
 
 .env.local/
+
+# Environment variables
+.env
+.env.*
