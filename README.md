@@ -1,13 +1,21 @@
-Got it — let’s cleanly format your entire content **exactly as a proper `README.md` file** that will render correctly on GitHub, with all your sections: title, features, stack, folder structure, usage flow, deployment, security tips, and contribution.
 
----
-
-### ✅ Final `README.md` (100% GitHub-ready):
-
-```markdown
 # 🚗 TripZyyy
 
 **TripZyyy** is an end-to-end carpooling and ride-sharing platform built with the **MERN stack** and **Next.js 14**. It allows users to post rides, book available ones, and share contact details securely once a booking is confirmed — helping reduce fuel costs and promote sustainable travel.
+
+![WhatsApp Image 2025-07-24 at 17 04 22_356d4c52](https://github.com/user-attachments/assets/2c38a2be-7ef7-4206-b040-84b2ea896770)
+
+
+![WhatsApp Image 2025-07-24 at 17 04 22_25e7c310](https://github.com/user-attachments/assets/1f30fa0f-1d65-4eed-9c8e-aa91e22413f5)
+
+![WhatsApp Image 2025-07-24 at 17 04 23_f142bb1f](https://github.com/user-attachments/assets/c38050e1-648d-4061-881c-dd337024fea2)
+
+
+![WhatsApp Image 2025-07-24 at 17 04 22_a1a11f0f](https://github.com/user-attachments/assets/0846871c-4c59-47b7-b933-2ef0abd82430)
+
+
+
+
 
 ---
 
@@ -176,15 +184,3 @@ Built with ❤️ by **Ansh**
 TripZyyy helps build a more sustainable future by encouraging carpooling and reducing emissions.
 Save money, meet people, and protect the planet — one ride at a time.
 
-```
-
----
-
-### ✅ Next Steps
-
-- Save this as your `README.md` in the project root.
-- Push it to GitHub.
-- Preview it on the GitHub UI — all headings, code blocks, and tables will look clean and structured.
-
-Let me know if you'd like badges (build, license, tech stack) or screenshots added too!
-```
