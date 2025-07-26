@@ -81,8 +81,8 @@ function RideCard({ ride, rideBookings, filter }) {
               <li key={booking._id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-[#16213a] rounded-xl px-3 py-2 border border-[#1e90ff]/10 shadow-sm">
                 <div className="flex flex-col gap-0.5">
                   <span className="text-blue-100 font-medium">{booking.passenger?.name || 'Unknown'}</span>
-                  {filter === 'other' && booking.passenger?.email && (
-                    <span className="text-xs text-blue-300">{booking.passenger.email}</span>
+                  {filter === 'other' && booking.status === 'accepted' && booking.passenger?.email && (
+                    <span className="text-xs text-green-300 font-semibold">{booking.passenger.email}</span>
                   )}
                   {filter === 'other' && booking.passenger?.phone && (
                     <span className="text-xs text-blue-300">{booking.passenger.phone}</span>
@@ -198,7 +198,7 @@ export default function MyRides() {
             {filteredRides.map((ride) => {
               const rideBookings = bookings.filter((b) => b.ride?._id === ride._id);
               return (
-                <SharedRideCard key={ride._id} ride={ride} rideBookings={rideBookings} />
+                <SharedRideCard key={ride._id} ride={ride} rideBookings={rideBookings} filter={filter} />
               );
             })}
           </div>
